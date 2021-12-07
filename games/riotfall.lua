@@ -56,7 +56,7 @@ function PlayerUtilities:GetBodyParts(Player)
     end
 end
 
-function function PlayerUtilities:IsPlayerAlive(Player)
+function PlayerUtilities:IsPlayerAlive(Player)
     local Character = Player.Character
     local Humanoid = (Character and Character:FindFirstChild("Humanoid"))
     local Health = (Humanoid and Humanoid.Health)
