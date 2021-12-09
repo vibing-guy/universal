@@ -323,15 +323,6 @@ RunService.RenderStepped:Connect(function()
             Objects.Box.Main.Color = PlayerColor
             Objects.Box.Main.Size = Size
             Objects.Box.Main.Position = Visuals:Round(Vector2.new(ScreenPosition.X, ScreenPosition.Y) - (Size / 2))
-            function Visuals:Round(Number, Bracket)
-                Bracket = (Bracket or 1)
-        
-                if typeof(Number) == "Vector2" then
-                    return Vector2.new(Visuals:Round(Number.X), Visuals:Round(Number.Y))
-                else
-                    return (Number - Number % (Bracket or 1))
-                end
-            end
 
             Objects.Box.Outline.Thickness = (Objects.Box.Main.Thickness * 2)
             Objects.Box.Outline.Size = Objects.Box.Main.Size
