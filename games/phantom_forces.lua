@@ -48,7 +48,6 @@ function PlayerUtilities:GetBodyParts(Player)
     end
 end
 
-
 function PlayerUtilities:AimAt(Position, Smoothing)
     local MouseLocation = UserInputService:GetMouseLocation()
     Smoothing += 0.5
