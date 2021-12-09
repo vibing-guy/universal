@@ -34,14 +34,11 @@ end
 function PlayerUtilities:GetBodyParts(Player)
     local BodyParts = Replication.getbodyparts(Player)
 
-    for i, v in pairs(BodyParts) do
-        print(i, v)
-    end
-    if BodyParts and BodyParts.rootpart then
+    if BodyParts and BodyParts.torso then
         return {
-            Character = BodyParts.rootpart.Parent,
+            Character = BodyParts.torso.Parent,
             Head = BodyParts.head,
-            Root = BodyParts.rootpart,
+            Root = BodyParts.torso,
             Torso = BodyParts.torso,
             LeftArm = BodyParts.larm,
             RightArm = BodyParts.rarm,
