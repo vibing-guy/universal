@@ -13,7 +13,9 @@ local function LoadFile(File)
 end
 
 local Games = {
-    [1954906532] = LoadFile("games/riotfall.lua") --// RIOTFALL
+    [1954906532] = "games/riotfall.lua", --// RIOTFALL
+    [111958650] = "games/arsenal.lua", --// Arsenal
+    [113491250] = "games/phantom_forces.lua", --// Phantom Forces
 }
 
 local Library = LoadFile("utilities/ui_library.lua")
@@ -243,10 +245,15 @@ local PlayerUtilities = {} do
     end
 end
 
---// Replace with custom functions to support games
 if Games[game.GameId] then
-    for Index, Value in pairs(Games[game.GameId]) do
-        PlayerUtilities[Index] = Value
+    local CustomGameFunctions = LoadFile(Games[game.GameId])
+
+    if CustomGameFunctions then
+        for Index, Value in pairs(CustomGameFunctions) do
+            PlayerUtilities[Index] = Value
+        end
+    else
+        LocalPlayer:Kick("[Universal]: Failed to replace normal functions with custom ones on file: " .. Games[game.GameId], CustomGameFunctions)
     end
 end
 
@@ -310,7 +317,7 @@ RunService.RenderStepped:Connect(function()
             local NameString = string.format("%s", Player.Name)
 
             if Player.DisplayName ~= Player.Name then
-                NameString = string.format("%s | %s", Player.Name, Player.DisplayName)
+                NameString = string.format("%s | @%s", Player.Name, Player.DisplayName)
             end
 
             Objects.Box.Main.Color = PlayerColor
@@ -357,7 +364,6 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
---// UI Library
 local Fonts = {} do
     for Font, Number in pairs(Drawing.Fonts) do
         table.insert(Fonts, Font)
