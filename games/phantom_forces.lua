@@ -1,8 +1,9 @@
 local PlayerUtilities = {}
 
 local UserInputService = game:GetService("UserInputService")
-local Replication, HUD
+local MoveMouse = mousemoverel
 
+local Replication, HUD
 for Index, Value in pairs(getgc(true)) do
     if typeof(Value) == "table" then 
         if rawget(Value, "getbodyparts") then
