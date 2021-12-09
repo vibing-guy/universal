@@ -1,6 +1,8 @@
 local PlayerUtilities = {}
 
+local UserInputService = game:GetService("UserInputService")
 local Replication, HUD
+
 for Index, Value in pairs(getgc(true)) do
     if typeof(Value) == "table" then 
         if rawget(Value, "getbodyparts") then
@@ -46,6 +48,13 @@ function PlayerUtilities:GetBodyParts(Player)
             RightLeg = BodyParts.rleg
         }
     end
+end
+
+
+function PlayerUtilities:AimAt(Position, Smoothing)
+    local MouseLocation = UserInputService:GetMouseLocation()
+    Smoothing += 0.5
+    MoveMouse(((Position.X - MouseLocation.X) / Smoothing), ((Position.Y - MouseLocation.Y) / Smoothing))
 end
 
 return PlayerUtilities
