@@ -15,9 +15,6 @@ for Index, Value in pairs(getgc(true)) do
     end
 end
 
-warn("GetBodyParts:", Replication)
-warn("GetPlayerHealth:", HUD)
-
 function PlayerUtilities:IsPlayerAlive(Player)
     return HUD:isplayeralive(Player)
 end
