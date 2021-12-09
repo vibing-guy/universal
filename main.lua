@@ -16,8 +16,8 @@ local Games = {
     [1954906532] = LoadFile("games/riotfall.lua") --// RIOTFALL
 }
 
-local Library = LoadFile("ui_library.lua")
-local CIELUVInterpolator = LoadFile("cieluv_interpolator.lua")
+local Library = LoadFile("utilities/ui_library.lua")
+local CIELUVInterpolator = LoadFile("utilities/cieluv_interpolator.lua")
 local HealthbarLerp = CIELUVInterpolator:Lerp(Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 255, 0))
 
 local Visuals = {Players = {}} do
