@@ -1,7 +1,6 @@
 local PlayerUtilities = {}
 
 local Replication, HUD
-
 for Index, Value in pairs(getgc(true)) do
     if typeof(Value) == "table" then 
         if rawget(Value, "getbodyparts") then
@@ -33,7 +32,7 @@ function PlayerUtilities:GetHealth(Player)
 end
 
 function PlayerUtilities:GetBodyParts(Player)
-    local BodyParts = Replication.GetBodyParts(Player)
+    local BodyParts = Replication.getbodyparts(Player)
 
     print(BodyParts)
     if BodyParts and BodyParts.torso then
