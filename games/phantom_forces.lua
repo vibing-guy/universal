@@ -1,15 +1,15 @@
 local PlayerUtilities = {}
 
-local GetBodyParts, GetPlayerHealth
+local Replication, HUD
 
 for Index, Value in pairs(getgc(true)) do
     if typeof(Value) == "table" then 
         if rawget(Value, "getbodyparts") then
-            GetBodyParts = Value.getbodyparts
+            Replication = Value
         end
 
         if rawget(Value, "getplayerhealth") then
-            GetPlayerHealth = Value.getplayerhealth
+            HUD = Value
         end
     end
 end
@@ -18,19 +18,11 @@ warn("GetBodyParts:", GetBodyParts)
 warn("GetPlayerHealth:", GetPlayerHealth)
 
 function PlayerUtilities:IsPlayerAlive(Player)
-    local PlayerHealth = GetPlayerHealth(Player, Player)
-
-    if PlayerHealth then
-        if math.floor(PlayerHealth) > 0 then
-            return true
-        end
-    end
-
-    return false
+    return HUD:isplayeralive(Player)
 end
 
 function PlayerUtilities:GetHealth(Player)
-    local PlayerHealth = GetPlayerHealth(Player, Player)
+    local PlayerHealth = HUD:getplayerhealth(Player)
 
     if PlayerHealth then
         return {
@@ -41,9 +33,10 @@ function PlayerUtilities:GetHealth(Player)
 end
 
 function PlayerUtilities:GetBodyParts(Player)
-    local BodyParts = GetBodyParts(Player)
+    local BodyParts = Replication.GetBodyParts(Player)
 
-    if BodyParts and BodyParts.rootpart then
+    print(BodyParts)
+    if BodyParts and BodyParts.torso then
         return {
             Character = BodyParts.rootpart.Parent,
             Head = BodyParts.head,
