@@ -9,7 +9,18 @@ local MoveMouse = mousemoverel
 local Repository = "https://raw.githubusercontent.com/coastss/universal/main/"
 
 local function LoadFile(File)
-    return loadstring(game:HttpGet(Repository .. File))()
+    local Source
+    local Success, Error = pcall(function() Source = game:HttpGet(Repository .. File) end)
+    
+    if Source and Success then
+        return loadstring(Source)()
+    elseif Error then
+        print("[universal]: Failed to get source of:", File, "because of:", Error)
+    else
+        print("[universal]: Failed to get source of:", File, "fail debug: source:", Source, "success:", Success, "error:", Error)
+    end
+    
+    return
 end
 
 local Games = {
