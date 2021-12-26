@@ -34,7 +34,7 @@ function PlayerUtilities:GetBodyParts(Player)
     local Mesh = (Character and Character:FindFirstChild("Mesh"):FindFirstChild("Character"):FindFirstChild("Hips"))
 
     if Character and Mesh then
-        local Head = (Mesh and (Mesh:FindFirstChild("BottomSpine"):FindFirstChild("MidSpine"):FindFirstChild("TopSpine"):FindFirstChild("Neck"):FindFirstChild("Head"))
+        local Head = (Mesh and Mesh:FindFirstChild("BottomSpine"):FindFirstChild("MidSpine"):FindFirstChild("TopSpine"):FindFirstChild("Neck"):FindFirstChild("Head"))
         local Root = (Character and Character:FindFirstChild("HumanoidRootPart"))
         local Torso = (Mesh and Mesh:FindFirstChild("BottomSpine"))
         local LeftArm = (Mesh and Mesh:FindFirstChild("BottomSpine"):FindFirstChild("MidSpine"):FindFirstChild("TopSpine"):FindFirstChild("LeftShoulder"):FindFirstChild("LeftArm"))
