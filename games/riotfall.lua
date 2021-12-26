@@ -31,17 +31,17 @@ end
 
 function PlayerUtilities:GetBodyParts(Player)
     local Character = Player.Character
-    local CollisionGeo = (Character and Character:FindFirstChild("CollisionGeo"))
+    local Mesh = (Character and Character:FindFirstChild("Mesh").Character.Hips)
 
 
-    if Character and CollisionGeo then
-        local Head = (CollisionGeo and CollisionGeo:FindFirstChild("Head"))
+    if Character and Mesh then
+        local Head = (Mesh and Mesh:FindFirstChild("Head"))
         local Root = (Character and Character:FindFirstChild("HumanoidRootPart"))
-        local Torso = (CollisionGeo and CollisionGeo:FindFirstChild("LowerTorso"))
-        local LeftArm = (CollisionGeo and CollisionGeo:FindFirstChild("LeftLowerArm"))
-        local RightArm = (CollisionGeo and CollisionGeo:FindFirstChild("RightLowerArm"))
-        local LeftLeg = (CollisionGeo and CollisionGeo:FindFirstChild("LeftLowerLeg"))
-        local RightLeg = (CollisionGeo and CollisionGeo:FindFirstChild("RightLowerLeg"))
+        local Torso = (Mesh and Mesh:FindFirstChild("BottomSpine"))
+        local LeftArm = true
+        local RightArm = true
+        local LeftLeg = (Mesh and Mesh:FindFirstChild("LeftUpLeg").LeftLeg.LeftFoot)
+        local RightLeg = (Mesh and Mesh:FindFirstChild("RightUpLeg").RightLeg.RightFoot)
 
         if Character and (Head and Root and Torso and LeftArm and RightArm and LeftLeg and RightLeg) then
             return {
