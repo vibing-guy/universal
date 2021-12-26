@@ -103,16 +103,7 @@ function SetAllTextLabelsTransparency(Transparency)
 end
 
 function shared:SetStatus(String)
-    local StartTween = TweenService:Create(Status, BaseTweenInfo, {TextTransparency = 1})
-    StartTween:Play() 
-    StartTween.Completed:Wait()
-
     Status.Text = String
-
-    local EndTween = TweenService:Create(Status, BaseTweenInfo, {TextTransparency = 0})
-    EndTween:Play() 
-    EndTween.Completed:Wait()
-
 	task.wait(0.5)
 end
 
