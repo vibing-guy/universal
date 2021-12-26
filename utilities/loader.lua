@@ -115,7 +115,7 @@ function shared:SetStatus(String)
 end
 
 function Library:Open()
-    local Tween TweenService:Create(Holder, BaseTweenInfo, {Position = UDim2.new(0.5, -150, 0.5, -50), Size = UDim2.new(0, 300, 0, 100)})
+    local Tween = TweenService:Create(Holder, BaseTweenInfo, {Position = UDim2.new(0.5, -150, 0.5, -50), Size = UDim2.new(0, 300, 0, 100)})
     SetAllTextLabelsTransparency(0)
 
     Tween:Play()
