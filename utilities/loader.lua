@@ -27,18 +27,18 @@ if syn and syn.protect_gui then
     syn.protect_gui(Loader)
 elseif get_hidden_gui then
     get_hidden_gui(Loader)
-elseif gethui then
-    Loader.Parent = gethui()
 else
     shared:Kick("[ui_library.lua]: protect_gui function not found.")
     return
 end
 
-if not gethui then
+if gethui then
+    Loader.Parent = gethui()
+else
     Loader.Parent = CoreGui
 end
 
-if shared.BeachwaveVersion then
+if not shared.BeachwaveVersion then
     shared.BeachwaveVersion = "Date not found"
 end
 
@@ -108,33 +108,39 @@ function shared:SetStatus(String)
     StartTween.Completed:Wait()
 
     Status.Text = String
+	task.wait(0.5)
 
     local EndTween = TweenService:Create(Status, BaseTweenInfo, {TextTransparency = 0})
     EndTween:Play() 
     EndTween.Completed:Wait()
+
+	task.wait(0.5)
 end
 
 function Library:Open()
     local Tween = TweenService:Create(Holder, BaseTweenInfo, {Position = UDim2.new(0.5, -150, 0.5, -50), Size = UDim2.new(0, 300, 0, 100)})
-    SetAllTextLabelsTransparency(0)
-
-    Tween:Play()
+	Tween:Play()
     Tween.Completed:Wait()
+
+    SetAllTextLabelsTransparency(0)
+	task.wait(0.5)
 end
 
 function Library:Close()
-    local Tween = TweenService:Create(Holder, BaseTweenInfo, {Position = UDim2.new(0.5, 0, 0.5, 0), Size = UDim2.new(0, 0, 0, 0)})
     SetAllTextLabelsTransparency(1)
-    
-    Tween:Play()
+
+	task.wait(0.5)
+    local Tween = TweenService:Create(Holder, BaseTweenInfo, {Position = UDim2.new(0.5, 0, 0.5, 0), Size = UDim2.new(0, 0, 0, 0)})
+	Tween:Play()
     Tween.Completed:Wait()
+
     Loader:Destroy()
     Library = nil
 end
 
 
-Holder.Position = UDim2.new(0.5, -150, 0.5, -50) 
-Holder.Size = UDim2.new(0, 300, 0, 100)
+Holder.Position = UDim2.new(0.5, 0, 0.5, 0) 
+Holder.Size = UDim2.new(0, 0, 0, 0)
 
 for Index, Object in pairs(Holder:GetChildren()) do
     Object.TextTransparency = 1
