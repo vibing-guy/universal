@@ -31,7 +31,7 @@ end
 
 function PlayerUtilities:GetBodyParts(Player)
     local Character = Player.Character
-    local Mesh = (Character and Character:FindFirstChild("Mesh").Character.Hips)
+    local Mesh = (Character and Character:FindFirstChild("Mesh"):FindFirstChild("Character"):FindFirstChild("Hips"))
 
 
     if Character and Mesh then
@@ -40,8 +40,8 @@ function PlayerUtilities:GetBodyParts(Player)
         local Torso = (Mesh and Mesh:FindFirstChild("BottomSpine"))
         local LeftArm = true
         local RightArm = true
-        local LeftLeg = (Mesh and Mesh:FindFirstChild("LeftUpLeg").LeftLeg.LeftFoot)
-        local RightLeg = (Mesh and Mesh:FindFirstChild("RightUpLeg").RightLeg.RightFoot)
+        local LeftLeg = (Mesh and Mesh:FindFirstChild("LeftUpLeg"):FindFirstChild("LeftLeg"):FindFirstChild("LeftFoot"))
+        local RightLeg = (Mesh and Mesh:FindFirstChild("RightUpLeg"):FindFirstChild("RightLeg"):FindFirstChild("RightFoot"))
 
         if Character and (Head and Root and Torso and LeftArm and RightArm and LeftLeg and RightLeg) then
             return {
