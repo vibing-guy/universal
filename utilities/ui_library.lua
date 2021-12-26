@@ -134,7 +134,7 @@ local function createOptionHolder(holderTitle, parent, parentTable, subHolder)
 	
 	layout.Changed:connect(function()
 		parentTable.content.Size = UDim2.new(1, 0, 0, layout.AbsoluteContentSize.Y)
-		parentTable.main.Size = #parentTable.options > 0 and parentTable.open and UDim2.new(0, 230, 0, layout.AbsoluteContentSize.Y + size) or UDim2.new(0, 230, 0, size)
+		tweenService:Create(parentTable.main, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = (#parentTable.options > 0 and parentTable.open and UDim2.new(0, 230, 0, layout.AbsoluteContentSize.Y + size) or UDim2.new(0, 230, 0, size))}):Play()
 	end)
 	
 	if not subHolder then
@@ -1614,7 +1614,7 @@ function library:Init()
 	elseif get_hidden_gui then
 		get_hidden_gui(self.base)
 	else
-		game:GetService"Players".LocalPlayer:Kick("Error: protect_gui function not found")
+		shared:Kick("[ui_library.lua]: protect_gui function not found.")
 		return
 	end
 	self.base.Parent = game:GetService"CoreGui"
