@@ -37,7 +37,7 @@ function PlayerUtilities:GetBodyParts(Player)
         local Head = (Mesh and (Mesh:FindFirstChild("BottomSpine"):FindFirstChild("MidSpine"):FindFirstChild("TopSpine"):FindFirstChild("Neck"):FindFirstChild("Head"))
         local Root = (Character and Character:FindFirstChild("HumanoidRootPart"))
         local Torso = (Mesh and Mesh:FindFirstChild("BottomSpine"))
-        local LeftArm = (Mesh and Mesh.("BottomSpine"):FindFirstChild("MidSpine"):FindFirstChild("TopSpine"):FindFirstChild("LeftShoulder"):FindFirstChild("LeftArm"))
+        local LeftArm = (Mesh and Mesh:FindFirstChild("BottomSpine"):FindFirstChild("MidSpine"):FindFirstChild("TopSpine"):FindFirstChild("LeftShoulder"):FindFirstChild("LeftArm"))
         local RightArm = (Mesh and Mesh:FindFirstChild("BottomSpine"):FindFirstChild("MidSpine"):FindFirstChild("TopSpine"):FindFirstChild("RightShoulder"):FindFirstChild("RightArm"))
         local LeftLeg = (Mesh and Mesh:FindFirstChild("LeftUpLeg"):FindFirstChild("LeftLeg"):FindFirstChild("LeftFoot"))
         local RightLeg = (Mesh and Mesh:FindFirstChild("RightUpLeg"):FindFirstChild("RightLeg"):FindFirstChild("RightFoot"))
@@ -67,7 +67,5 @@ function PlayerUtilities:GetDistanceFromClient(Position)
 
     return 0
 end
-
-print("[rf]: v1.2")
 
 return PlayerUtilities
