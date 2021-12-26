@@ -108,7 +108,6 @@ function shared:SetStatus(String)
     StartTween.Completed:Wait()
 
     Status.Text = String
-	task.wait(0.5)
 
     local EndTween = TweenService:Create(Status, BaseTweenInfo, {TextTransparency = 0})
     EndTween:Play() 
