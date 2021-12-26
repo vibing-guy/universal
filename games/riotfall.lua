@@ -33,6 +33,7 @@ function PlayerUtilities:GetBodyParts(Player)
     local Character = Player.Character
     local Mesh = (Character and Character:FindFirstChild("Mesh"):FindFirstChild("Character"):FindFirstChild("Hips"))
 
+    print(Mesh)
 
     if Character and Mesh then
         local Head = (Mesh and Mesh:FindFirstChild("Head"))
