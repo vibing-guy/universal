@@ -97,7 +97,7 @@ local Status = Library:Create("TextLabel", {
 })
 
 function SetAllTextLabelsTransparency(Transparency)
-    for Index, Object in pairs(Holder) do
+    for Index, Object in pairs(Holder:GetChildren()) do
         TweenService:Create(Object, BaseTweenInfo, {TextTransparency = Transparency}):Play()
     end
 end
@@ -136,7 +136,7 @@ end
 Holder.Position = UDim2.new(0.5, -150, 0.5, -50) 
 Holder.Size = UDim2.new(0, 300, 0, 100)
 
-for Index, Object in pairs(Holder) do
+for Index, Object in pairs(Holder:GetChildren()) do
     Object.TextTransparency = 1
 end
 
