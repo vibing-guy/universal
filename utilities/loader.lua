@@ -104,7 +104,6 @@ end
 
 function shared:SetStatus(String)
     Status.Text = String
-	task.wait(0.5)
 end
 
 function Library:Open()
