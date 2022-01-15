@@ -1,4 +1,4 @@
-# universal
+# beachwave - universal
 Universal aimbot and visuals for roblox
 
 # script
