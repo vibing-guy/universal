@@ -1,5 +1,5 @@
 # beachwave - universal
-Universal aimbot and visuals for roblox
+universal aimbot and visuals for roblox
 
 # script
 ```lua
