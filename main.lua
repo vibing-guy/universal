@@ -8,20 +8,30 @@ local LocalPlayer = Players.LocalPlayer
 local MoveMouse = mousemoverel
 local Repository = "https://raw.githubusercontent.com/coastss/universal/main/"
 
+function shared:Kick(String)
+    LocalPlayer:Kick("[beachwave]: " .. String)
+    return
+end
+
+function shared:SetStatus()
+end
+
 local function LoadFile(File)
+    shared:SetStatus("Loading " .. File .. "...")
+
     local Source
     local Success, Error = pcall(function() Source = game:HttpGet(Repository .. File) end)
     
     if Source and Success then
         return loadstring(Source)()
-    elseif Error then
-        print("[universal]: Failed to get source of:", File, "because of:", Error)
-    else
-        print("[universal]: Failed to get source of:", File, "fail debug: source:", Source, "success:", Success, "error:", Error)
     end
     
-    return
+    return Source, true
 end
+
+shared.BeachwaveVersion = "1/15/22"
+local Loader = LoadFile("utilities/loader.lua")
+Loader:Open()
 
 local Games = {
     [1954906532] = "games/riotfall.lua", --// RIOTFALL
@@ -33,40 +43,41 @@ local Library = LoadFile("utilities/ui_library.lua")
 local CIELUVInterpolator = LoadFile("utilities/cieluv_interpolator.lua")
 local HealthbarLerp = CIELUVInterpolator:Lerp(Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 255, 0))
 
-local Visuals = {Players = {}} do
-    local DrawingProperties = {
-        Line = {
-            Thickness = 1.5,
-            Color = Color3.fromRGB(255, 255, 255),
-            Visible = false
-        },
-        Text = {
-            Size = 16,
-            Center = true,
-            Outline = true,
-            Color = Color3.fromRGB(255, 255, 255),
-            Visible = false
-        },
-        Circle = {
-            Thickness = 1.5,
-            NumSides = 100,
-            Radius = 0,
-            Filled = false,
-            Color = Color3.fromRGB(255, 255, 255),
-            Visible = false
-        },
-        Square = {
-            Thickness = 1.5,
-            Filled = false,
-            Color = Color3.fromRGB(255, 255, 255),
-            Visible = false
-        },
-        Image = {
-            Rounding = 0,
-            Visible = false
-        }
+local DrawingProperties = {
+    Line = {
+        Thickness = 1.5,
+        Color = Color3.fromRGB(255, 255, 255),
+        Visible = false
+    },
+    Text = {
+        Size = 16,
+        Center = true,
+        Outline = true,
+        Color = Color3.fromRGB(255, 255, 255),
+        Visible = false
+    },
+    Circle = {
+        Thickness = 1.5,
+        NumSides = 100,
+        Radius = 0,
+        Filled = false,
+        Color = Color3.fromRGB(255, 255, 255),
+        Visible = false
+    },
+    Square = {
+        Thickness = 1.5,
+        Filled = false,
+        Color = Color3.fromRGB(255, 255, 255),
+        Visible = false
+    },
+    Image = {
+        Rounding = 0,
+        Visible = false
     }
+}
 
+
+local Visuals = {Players = {}} do
     function Visuals:Round(Number, Bracket)
         Bracket = (Bracket or 1)
 
@@ -107,7 +118,7 @@ local Visuals = {Players = {}} do
                 Box = {
                     Outline = Visuals:CreateDrawing("Square", {Color = Color3.fromRGB(0, 0, 0)}),
                     Main = Visuals:CreateDrawing("Square")
-                    --// Main = Visuals:CreateDrawing("Image", {Data = game:HttpGet("https://coasts.cool/uploads/48ny7FCjZ9iCmbAwlirI.png")})
+                    --// Main = Visuals:CreateDrawing("Image", {Data = game:HttpGet("https://coasts.cool/uploads/48ny7FCjZ9iCmbAwirI.png")})
 
                 },
                 Healthbar = {
@@ -264,9 +275,11 @@ if Games[game.GameId] then
             PlayerUtilities[Index] = Value
         end
     else
-        LocalPlayer:Kick("[Universal]: Failed to replace normal functions with custom ones on file: " .. Games[game.GameId], CustomGameFunctions)
+        shared:Kick("Failed to replace normal functions with custom ones on file: " .. Games[game.GameId])
     end
 end
+
+Loader:Close()
 
 local FOVCircle = Visuals:CreateDrawing("Circle")
 for Index, Player in pairs(Players:GetPlayers()) do
@@ -348,10 +361,12 @@ RunService.RenderStepped:Connect(function()
             
             Objects.Info.Main.Font = Drawing.Fonts[Library.flags["Visuals Info Font"]]
             Objects.Info.Main.Text = NameString
+            Objects.Info.Main.Size = Library.flags["Visuals Info Font Size"]
             Objects.Info.Main.Position = Vector2.new(((Objects.Box.Main.Size.X / 2) + Objects.Box.Main.Position.X), ((ScreenPosition.Y - Objects.Box.Main.Size.Y / 2) - 18))
 
             Objects.Info.Extra.Font = Drawing.Fonts[Library.flags["Visuals Info Font"]]
             Objects.Info.Extra.Text = string.format("(%dft) (%d/%d)", Distance, Health.CurrentHealth, Health.MaxHealth)
+            Objects.Info.Extra.Size = Library.flags["Visuals Info Font Size"]
             Objects.Info.Extra.Position = Vector2.new(((Objects.Box.Main.Size.X / 2) + Objects.Box.Main.Position.X), (Objects.Box.Main.Size.Y + Objects.Box.Main.Position.Y))
         end
 
@@ -366,13 +381,13 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
+Library.flags["Aimbot Active"] = false
+
 local Fonts = {} do
     for Font, Number in pairs(Drawing.Fonts) do
         table.insert(Fonts, Font)
     end
 end
-
-Library.flags["Aimbot Active"] = false
 
 local AimbotTab = Library:CreateWindow("Aimbot")
 AimbotTab:AddToggle({text = "Enabled", flag = "Aimbot Enabled"})
@@ -421,6 +436,15 @@ VisualsTab:AddList({
     text = "Info Font",
     flag = "Visuals Info Font",
     values = Fonts
+})
+
+VisualsTab:AddSlider({
+    text = "Font Size",
+    flag = "Visuals Info Font Size",
+    min = 12,
+    max = 42,
+    float = 1,
+    value = DrawingProperties.Text.Size
 })
 
 VisualsTab:AddColor({
