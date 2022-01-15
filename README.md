@@ -2,9 +2,9 @@
 universal aimbot and visuals for roblox
 
 # games with added support
-- phantom forces
-- riotfall
-- arsenal
+- phantom forces (https://www.roblox.com/games/292439477/Phantom-Forces-Pacific-Cold-Front-Pt-3)
+- riotfall (https://www.roblox.com/games/5595252083/RIOTFALL-ALPHA)
+- arsenal (https://www.roblox.com/games/286090429/Arsenal)
 
 # script
 ```lua
