@@ -1609,15 +1609,18 @@ local UnlockMouse
 function library:Init()
 	
 	self.base = self.base or self:Create("ScreenGui")
-	if syn and syn.protect_gui then
+
+	if syn.protect_gui then
 		syn.protect_gui(self.base)
 	elseif get_hidden_gui then
 		get_hidden_gui(self.base)
-	else
-		shared:Kick("[ui_library.lua]: protect_gui function not found.")
-		return
 	end
-	self.base.Parent = game:GetService"CoreGui"
+	
+	if gethui then
+		self.base.Parent = gethui()
+	else
+		self.base.Parent = game:GetService"CoreGui"
+	end
 	
 	for _, window in next, self.windows do
 		if window.canInit and not window.init then
