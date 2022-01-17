@@ -1319,6 +1319,17 @@ local function createColorPickerWindow(option)
 		end
 	end)
 	
+	function option:DisableRainbow()
+		rainbowEnabled = false
+
+		if rainbowLoop then
+			rainbowLoop:Disconnect()
+		end
+
+		option:SetColor(previousColors[#previousColors])
+		option.rainbowText.TextColor3 = Color3.fromRGB(255, 255, 255)
+	end
+
 	return option
 end
 
