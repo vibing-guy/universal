@@ -15,6 +15,9 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/coastss/universal/mai
 ## January 17th, 2022 (1/17/2022):
 ### [Added]:
 - Config files
-### [Fixed]:
-- RIOTFALL
+### [Changed]:
+- RIOTFALL (fixed)
 - Moved some UI elements around
+## January 16th, 2022 (1/16/2022):
+### [Changed]:
+- Visual boxes
