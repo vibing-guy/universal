@@ -1,5 +1,3 @@
-print("lib v1.1")
-
 local library = {flags = {}, windows = {}, open = true}
 
 --Services
@@ -1414,6 +1412,10 @@ local function createColor(option, parent, holder)
 			end
 		end
 	end)
+
+	function option:DisableRainbow()
+		self:DisableRainbow()
+	end
 	
 	function option:SetColor(newColor)
 		if self.mainHolder then
