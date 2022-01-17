@@ -10,3 +10,11 @@ universal aimbot and visuals for roblox
 ```lua
 loadstring(game:HttpGet("https://raw.githubusercontent.com/coastss/universal/main/main.lua"))()
 ```
+
+# change log
+## January 17th, 2022 (1/17/2022):
+### [Added]:
+- Config files
+### [Fixed]:
+- RIOTFALL
+- Moved some UI elements around
