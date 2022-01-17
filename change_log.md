@@ -1,6 +1,6 @@
 # January 17th, 2022 (1/17/2022):
-###[Added]:
+### [Added]:
 - Config files
-###[Fixed]:
+### [Fixed]:
 - RIOTFALL
 - Moved some ui elements around
