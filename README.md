@@ -1,5 +1,5 @@
 # beachwave - universal
-Universal aimbot and visuals for Roblox
+universal aimbot and visuals for roblox
 
 # games with added support
 - Phantom Forces (https://www.roblox.com/games/292439477/Phantom-Forces-Pacific-Cold-Front-Pt-3)
