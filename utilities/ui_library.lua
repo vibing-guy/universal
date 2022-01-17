@@ -1,3 +1,5 @@
+print("lib v1.1")
+
 local library = {flags = {}, windows = {}, open = true}
 
 --Services
