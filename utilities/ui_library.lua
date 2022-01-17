@@ -1,3 +1,4 @@
+print("ggg")
 local library = {flags = {}, windows = {}, open = true}
 
 --Services
@@ -1414,7 +1415,9 @@ local function createColor(option, parent, holder)
 	end)
 
 	function option:DisableRainbow()
-		self:DisableRainbow()
+		if self.mainHolder then
+			self:DisableRainbow()
+		end
 	end
 	
 	function option:SetColor(newColor)
