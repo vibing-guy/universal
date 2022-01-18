@@ -1,11 +1,19 @@
+local MoveMouse = mousemoverel
+local ReadFile = readfile
+local WriteFile = writefile
+local IsFile = isfile
+local IsFolder = isfolder
+local MakeFolder = makefolder
+
 local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
 local Teams = game:GetService("Teams")
+
+local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
-local MoveMouse = mousemoverel
 local Repository = "https://raw.githubusercontent.com/coastss/universal/main/"
 
 function shared:Kick(String)
@@ -29,7 +37,7 @@ local function LoadFile(File)
     return Source, true
 end
 
-shared.BeachwaveVersion = "1/15/22"
+shared.BeachwaveVersion = "1/17/2022"
 local Loader = LoadFile("utilities/loader.lua")
 Loader:Open()
 
@@ -39,9 +47,15 @@ local Games = {
     [113491250] = "games/phantom_forces.lua", --// Phantom Forces
 }
 
-local Library = LoadFile("utilities/ui_library.lua")
+local Library = LoadFile("utilities/ui_library.lua") do
+    Library.flags["Settings Config File"] = ""
+    Library.flags["Aimbot Active"] = false
+end
+ 
 local CIELUVInterpolator = LoadFile("utilities/cieluv_interpolator.lua")
+
 local HealthbarLerp = CIELUVInterpolator:Lerp(Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 255, 0))
+Library.flags["Aimbot Active"] = false
 
 local DrawingProperties = {
     Line = {
@@ -75,7 +89,6 @@ local DrawingProperties = {
         Visible = false
     }
 }
-
 
 local Visuals = {Players = {}} do
     function Visuals:Round(Number, Bracket)
@@ -279,6 +292,11 @@ if Games[game.GameId] then
     end
 end
 
+local RepositoryVersion = LoadFile("version.lua")
+if shared.BeachwaveVersion ~= RepositoryVersion then
+    return shared:SetStatus("update available! see github (https://github.com/coastss/universal).")
+end
+
 Loader:Close()
 
 local FOVCircle = Visuals:CreateDrawing("Circle")
@@ -381,18 +399,74 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
-Library.flags["Aimbot Active"] = false
-
 local Fonts = {} do
     for Font, Number in pairs(Drawing.Fonts) do
         table.insert(Fonts, Font)
     end
 end
 
+Library.ConfigManager = {} do
+    local Directory = "beachwave"
+    local Conversions = {
+        toggle = function(Toggle, Value)
+            Toggle:SetState(Value)
+        end,
+        bind = function(Bind, Value)
+            Bind:SetKey(Value)
+        end,
+        slider = function(Slider, Value)
+            Slider:SetValue(Value)
+        end,
+        list = function(List, Value)
+            List:SetValue(Value)
+        end,
+        color = function(ColorPicker, Value)
+            ColorPicker:DisableRainbow()
+            ColorPicker:SetColor(Value)
+        end
+    }
+    
+    function Library.ConfigManager:LoadConfig()
+        FileName = ("%s/%s.bw"):format(Directory, Library.flags["Settings Config File"])
+        if not IsFolder(Directory) or not IsFile(FileName) then return end
+        
+        local Config = HttpService:JSONDecode(ReadFile(FileName))
+        for Index, Value in pairs(Config) do
+            if typeof(Value) == "string" and Value:sub(1, 1) == "#" then --// Assume it's a Color Picker
+                Library.flags[Index] = Color3.fromHex(Value)
+            else
+                Library.flags[Index] = Value
+            end
+        end
+        
+        for Index, Tab in pairs(Library.windows) do
+            for Index2, Option in pairs(Tab.options) do
+                if Conversions[Option.type] and (Option.flag and Library.flags[Option.flag]) then
+                    Conversions[Option.type](Option, Library.flags[Option.flag])
+                end
+            end
+        end
+    end
+
+    function Library.ConfigManager:SaveConfig()
+        FileName = ("%s/%s.bw"):format(Directory, Library.flags["Settings Config File"])
+        if not IsFolder(Directory) then MakeFolder(Directory) end
+        
+        local FlagsClone = {}
+        for Index, Value in pairs(Library.flags) do
+            if typeof(Value) == "Color3" then
+                Value = ("#" .. Value:ToHex())
+            end
+            
+            FlagsClone[Index] = Value
+        end
+
+        WriteFile(FileName, HttpService:JSONEncode(FlagsClone))
+    end
+end
+
 local AimbotTab = Library:CreateWindow("Aimbot")
 AimbotTab:AddToggle({text = "Enabled", flag = "Aimbot Enabled"})
-AimbotTab:AddToggle({text = "Use Field of View", flag = "Aimbot Use FOV"})
-AimbotTab:AddToggle({text = "Team Check", flag = "Aimbot Team Check"})
 AimbotTab:AddBind({
     text = "Bind",
     flag = "Aimbot Bind",
@@ -401,6 +475,14 @@ AimbotTab:AddBind({
     callback = function(Value)
         Library.flags["Aimbot Active"] = (not Value)
     end
+})
+
+AimbotTab:AddToggle({text = "Team Check", flag = "Aimbot Team Check"})
+AimbotTab:AddToggle({text = "Use Field of View", flag = "Aimbot Use FOV"})
+AimbotTab:AddColor({
+    text = "FOV Circle Color",
+    flag = "Aimbot FOV Color",
+    color = Color3.fromRGB(255, 255, 255)
 })
 
 AimbotTab:AddSlider({
@@ -419,12 +501,6 @@ AimbotTab:AddSlider({
     float = 0.1
 })
 
-AimbotTab:AddColor({
-    text = "FOV Circle Color",
-    flag = "Aimbot FOV Color",
-    color = Color3.fromRGB(255, 255, 255)
-})
-
 local VisualsTab = Library:CreateWindow("Visuals")
 VisualsTab:AddToggle({text = "Boxes", flag = "Visuals Show Boxes"})
 VisualsTab:AddToggle({text = "Healthbar", flag = "Visuals Show Healthbar"})
@@ -432,21 +508,6 @@ VisualsTab:AddToggle({text = "Info", flag = "Visuals Show Info"})
 VisualsTab:AddToggle({text = "Extra Info", flag = "Visuals Show Extra Info"})
 VisualsTab:AddToggle({text = "Use Team Color", flag = "Visuals Use Team Color"})
 VisualsTab:AddToggle({text = "Team Check", flag = "Visuals Team Check"})
-VisualsTab:AddList({
-    text = "Info Font",
-    flag = "Visuals Info Font",
-    values = Fonts
-})
-
-VisualsTab:AddSlider({
-    text = "Font Size",
-    flag = "Visuals Info Font Size",
-    min = 12,
-    max = 42,
-    float = 1,
-    value = DrawingProperties.Text.Size
-})
-
 VisualsTab:AddColor({
     text = "Ally Color",
     flag = "Visuals Ally Color",
@@ -458,6 +519,35 @@ VisualsTab:AddColor({
     flag = "Visuals Enemy Color",
     color = Color3.fromRGB(255, 0, 0)
 })
+
+VisualsTab:AddSlider({
+    text = "Font Size",
+    flag = "Visuals Info Font Size",
+    min = 12,
+    max = 42,
+    float = 1,
+    value = DrawingProperties.Text.Size
+})
+
+VisualsTab:AddList({
+    text = "Info Font",
+    flag = "Visuals Info Font",
+    values = Fonts
+})
+
+local SettingsTab = Library:CreateWindow("Settings")
+SettingsTab:AddLabel({text = ("Build: " .. shared.BeachwaveVersion)})
+SettingsTab:AddBox({text = "Config File Name", flag = "Settings Config File"})
+SettingsTab:AddButton({text = "Save Config", callback = function()
+    Library.ConfigManager:SaveConfig()
+end})
+
+SettingsTab:AddButton({text = "Load Config", callback = function()
+    Library.ConfigManager:LoadConfig()
+end})
+
+SettingsTab:AddButton({text = "Unload", callback = function() 
+end})
 
 Library:Init()
 
