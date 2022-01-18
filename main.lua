@@ -300,10 +300,15 @@ end
 
 local RepositoryVersion = LoadFile("version.lua")
 if shared.BeachwaveVersion ~= RepositoryVersion then
-    return shared:SetStatus("update available! see github (https://github.com/coastss/universal).")
-end
+    for Iteration = 5, 1, -1 do
+        shared:SetStatus("(" .. Iteration .. ") update available! loading latest version...")
+        task.wait(1)
+    end
 
-Loader:Close()
+    Loader:Close()
+    loadstring(game:HttpGet(Repository .. "main.lua"))()
+    return
+end
 
 local FOVCircle = Visuals:CreateDrawing("Circle")
 for Index, Player in pairs(Players:GetPlayers()) do
