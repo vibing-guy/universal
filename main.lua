@@ -4,6 +4,12 @@ local WriteFile = writefile
 local IsFile = isfile
 local IsFolder = isfolder
 local MakeFolder = makefolder
+local ListFiles = listfiles
+local GlobalEnvironment = getgenv
+
+if GlobalEnvironment().beachwave then
+    GlobalEnvironment().beachwave.Unload()
+end
 
 local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -305,14 +311,20 @@ for Index, Player in pairs(Players:GetPlayers()) do
     Visuals.AddPlayer(Player)
 end
 
-Players.PlayerAdded:Connect(Visuals.AddPlayer)
-Players.PlayerRemoving:Connect(Visuals.RemovePlayer)
-RunService.RenderStepped:Connect(function()
+local PlayerAddedEvent = Players.PlayerAdded:Connect(Visuals.AddPlayer)
+local PlayerRemovingEvent = Players.PlayerRemoving:Connect(Visuals.RemovePlayer)
+local LoopId = HttpService:GenerateGUID(false)
+RunService:BindToRenderStep(LoopId, 1, function()
     FOVCircle.Position = UserInputService:GetMouseLocation()
-    FOVCircle.Radius = Library.flags["Aimbot FOV Radius"]
     FOVCircle.Color = Library.flags["Aimbot FOV Color"]
     FOVCircle.Visible = ((Library.flags["Aimbot Enabled"] and Library.flags["Aimbot Use FOV"]) and true) or false
     
+    if Library.flags["Aimbot Dynamic FOV"] then
+        FOVCircle.Radius = (Library.flags["Aimbot FOV Radius"] + workspace.CurrentCamera.FieldOfView)
+    else
+        FOVCircle.Radius = Library.flags["Aimbot FOV Radius"]
+    end
+
     if Library.flags["Aimbot Enabled"] and Library.flags["Aimbot Active"] then
         local ClosestPlayer = PlayerUtilities:GetClosestPlayer()
 
@@ -399,6 +411,30 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
+GlobalEnvironment().beachwave = {
+    Unload = function()
+        PlayerAddedEvent:Disconnect()
+        PlayerRemovingEvent:Disconnect()
+
+        for Flag, Value in pairs(Library.flags) do
+            if typeof(Value) == "boolean" then
+                Library.flags[Flag] = false
+            end
+        end
+
+        for Index, Player in pairs(Players:GetPlayers()) do
+            if Player == LocalPlayer then continue end
+            Visuals.RemovePlayer(Player)
+        end
+
+        RunService:UnbindFromRenderStep(LoopId)
+        Library.base:Destroy()
+        FOVCircle:Remove()
+
+        GlobalEnvironment().beachwave = nil
+    end
+}
+
 local Fonts = {} do
     for Font, Number in pairs(Drawing.Fonts) do
         table.insert(Fonts, Font)
@@ -407,6 +443,8 @@ end
 
 Library.ConfigManager = {} do
     local Directory = "beachwave"
+    Library.ConfigManager.Directory = Directory
+
     local Conversions = {
         toggle = function(Toggle, Value)
             Toggle:SetState(Value)
@@ -479,6 +517,7 @@ AimbotTab:AddBind({
 
 AimbotTab:AddToggle({text = "Team Check", flag = "Aimbot Team Check"})
 AimbotTab:AddToggle({text = "Use Field of View", flag = "Aimbot Use FOV"})
+--// AimbotTab:AddToggle({text = "Dynamic FOV", flag = "Aimbot Dynamic FOV"})
 AimbotTab:AddColor({
     text = "FOV Circle Color",
     flag = "Aimbot FOV Color",
@@ -546,7 +585,8 @@ SettingsTab:AddButton({text = "Load Config", callback = function()
     Library.ConfigManager:LoadConfig()
 end})
 
-SettingsTab:AddButton({text = "Unload", callback = function() 
+SettingsTab:AddButton({text = "Unload", callback = function()
+    GlobalEnvironment().beachwave.Unload()
 end})
 
 Library:Init()
