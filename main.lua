@@ -310,6 +310,8 @@ if shared.BeachwaveVersion ~= RepositoryVersion then
     return
 end
 
+Loader:Close()
+
 local FOVCircle = Visuals:CreateDrawing("Circle")
 for Index, Player in pairs(Players:GetPlayers()) do
     if Player == LocalPlayer then continue end
