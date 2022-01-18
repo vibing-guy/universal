@@ -12,6 +12,9 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/coastss/universal/mai
 ```
 
 # change log
+## January 18th, 2022 (1/18/2022):
+### [Added]:
+- Unload button
 ## January 17th, 2022 (1/17/2022):
 ### [Added]:
 - Config files
