@@ -43,7 +43,7 @@ local function LoadFile(File)
     return Source, true
 end
 
-shared.BeachwaveVersion = "1/17/2022"
+shared.BeachwaveVersion = "1/18/2022"
 local Loader = LoadFile("utilities/loader.lua")
 Loader:Open()
 
