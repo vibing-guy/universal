@@ -1,4 +1,3 @@
-print("ggg")
 local library = {flags = {}, windows = {}, open = true}
 
 --Services
