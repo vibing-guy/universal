@@ -53,10 +53,12 @@ local Games = {
     [113491250] = "games/phantom_forces.lua", --// Phantom Forces
 }
 
-local Library = LoadFile("utilities/ui_library.lua") do
-    Library.flags["Settings Config File"] = ""
-    Library.flags["Aimbot Active"] = false
+if not getgenv().Library then
+    getgenv().Library = LoadFile("utilities/ui_library.lua")
 end
+
+Library.flags["Settings Config File"] = ""
+Library.flags["Aimbot Active"] = false
  
 local CIELUVInterpolator = LoadFile("utilities/cieluv_interpolator.lua")
 
