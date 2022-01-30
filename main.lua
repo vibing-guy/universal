@@ -1,14 +1,7 @@
-local MoveMouse = mousemoverel
-local ReadFile = readfile
-local WriteFile = writefile
-local IsFile = isfile
-local IsFolder = isfolder
-local MakeFolder = makefolder
-local ListFiles = listfiles
 local GlobalEnvironment = getgenv
 
-if GlobalEnvironment().beachwave then
-    GlobalEnvironment().beachwave.Unload()
+if getgenv().beachwave then
+    getgenv().beachwave.Unload()
 end
 
 local UserInputService = game:GetService("UserInputService")
@@ -284,7 +277,7 @@ local PlayerUtilities = {} do
 
     function PlayerUtilities:AimAt(Position, Smoothing)
         local MouseLocation = UserInputService:GetMouseLocation()
-        MoveMouse(((Position.X - MouseLocation.X) / Smoothing), ((Position.Y - MouseLocation.Y) / Smoothing))
+        mousemoverel(((Position.X - MouseLocation.X) / Smoothing), ((Position.Y - MouseLocation.Y) / Smoothing))
     end
 end
 
@@ -420,7 +413,7 @@ RunService:BindToRenderStep(LoopId, 1, function()
     end
 end)
 
-GlobalEnvironment().beachwave = {
+getgenv().beachwave = {
     Unload = function()
         PlayerAddedEvent:Disconnect()
         PlayerRemovingEvent:Disconnect()
@@ -440,7 +433,7 @@ GlobalEnvironment().beachwave = {
         Library.base:Destroy()
         FOVCircle:Remove()
 
-        GlobalEnvironment().beachwave = nil
+        getgenv().beachwave = nil
     end
 }
 
@@ -475,9 +468,9 @@ Library.ConfigManager = {} do
     
     function Library.ConfigManager:LoadConfig()
         FileName = ("%s/%s.bw"):format(Directory, Library.flags["Settings Config File"])
-        if not IsFolder(Directory) or not IsFile(FileName) then return end
+        if not isfolder(Directory) or not isfile(FileName) then return end
         
-        local Config = HttpService:JSONDecode(ReadFile(FileName))
+        local Config = HttpService:JSONDecode(readfile(FileName))
         for Index, Value in pairs(Config) do
             if typeof(Value) == "string" and Value:sub(1, 1) == "#" then --// Assume it's a Color Picker
                 Library.flags[Index] = Color3.fromHex(Value)
@@ -497,7 +490,7 @@ Library.ConfigManager = {} do
 
     function Library.ConfigManager:SaveConfig()
         FileName = ("%s/%s.bw"):format(Directory, Library.flags["Settings Config File"])
-        if not IsFolder(Directory) then MakeFolder(Directory) end
+        if not isfolder(Directory) then makefolder(Directory) end
         
         local FlagsClone = {}
         for Index, Value in pairs(Library.flags) do
@@ -508,7 +501,7 @@ Library.ConfigManager = {} do
             FlagsClone[Index] = Value
         end
 
-        WriteFile(FileName, HttpService:JSONEncode(FlagsClone))
+        writefile(FileName, HttpService:JSONEncode(FlagsClone))
     end
 end
 
@@ -595,7 +588,7 @@ SettingsTab:AddButton({text = "Load Config", callback = function()
 end})
 
 SettingsTab:AddButton({text = "Unload", callback = function()
-    GlobalEnvironment().beachwave.Unload()
+    getgenv().beachwave.Unload()
 end})
 
 Library:Init()
