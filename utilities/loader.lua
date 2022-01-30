@@ -23,16 +23,16 @@ local Loader = Library:Create("ScreenGui", {
     Enabled = false
 })
 
-if syn.protect_gui then
-    syn.protect_gui(Loader)
-elseif get_hidden_gui then
-    get_hidden_gui(Loader)
-end
-
-if gethui then
-    Loader.Parent = gethui()
+if (syn and syn.protect_gui) then
+	syn.protect_gui(Loader)
+	Loader.Parent = game:GetService("CoreGui")
+elseif type(get_hidden_gui) == 'function' then
+	Loader.Parent = get_hidden_gui()
+elseif type(gethui) == 'function' then
+	Loader.Parent = gethui()
 else
-    Loader.Parent = CoreGui
+	Loader.Name = tostring(math.random())
+	Loader.Parent = game:GetService("CoreGui")
 end
 
 if not shared.BeachwaveVersion then
