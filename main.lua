@@ -1,5 +1,3 @@
-local GlobalEnvironment = getgenv
-
 if getgenv().beachwave then
     getgenv().beachwave.Unload()
 end
